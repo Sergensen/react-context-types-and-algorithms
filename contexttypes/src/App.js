@@ -1,21 +1,39 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
-import './App.css';
 
-class App extends Component {
+const TestContext = React.createContext('test');
+
+class App extends React.Component {
   render() {
     return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <h1 className="App-title">Welcome to React</h1>
-        </header>
-        <p className="App-intro">
-          To get started, edit <code>src/App.js</code> and save to reload.
-        </p>
-      </div>
+      <TestContext.Provider value="testValue">
+        <TestChild />
+      </TestContext.Provider>
     );
   }
+}
+
+function TestChild(props) {
+  return (
+    <div>
+      <TestButton />
+    </div>
+  );
+}
+
+function TestButton(props) {
+  return (
+    <TestContext.Consumer>
+      {testValue => <Button {...props} testProp={testValue} />}
+    </TestContext.Consumer>
+  );
+}
+
+function Button(props) {
+  return (
+    <button type="button">
+      {props.testProp}
+    </button>
+  );
 }
 
 export default App;
