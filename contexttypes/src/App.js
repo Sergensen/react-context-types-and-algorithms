@@ -1,39 +1,42 @@
 import React, { Component } from 'react';
+import ButtonBar from './ButtonBar';
+import ButtonContext from './ButtonContext';
 
-const TestContext = React.createContext('test');
+class App extends Component {
+  state = {
+    current: -1
+  }
 
-class App extends React.Component {
+
+  changeState(e) {
+    this.setState({current: e.target.value});
+  }
+
   render() {
     return (
-      <TestContext.Provider value="testValue">
-        <TestChild />
-      </TestContext.Provider>
+      <div style={styles.container}>
+        <ButtonContext.Provider value={{style: styles.buttonTheme, handler: this.changeState.bind(this)}}>
+          <ButtonBar />
+        </ButtonContext.Provider>
+      </div>
     );
   }
 }
 
-function TestChild(props) {
-  return (
-    <div>
-      <TestButton />
-    </div>
-  );
-}
-
-function TestButton(props) {
-  return (
-    <TestContext.Consumer>
-      {testValue => <Button {...props} testProp={testValue} />}
-    </TestContext.Consumer>
-  );
-}
-
-function Button(props) {
-  return (
-    <button type="button">
-      {props.testProp}
-    </button>
-  );
-}
-
 export default App;
+
+const styles = {
+  buttonTheme: {
+    backgroundColor: "lightgrey",
+    color: "white",
+    border: "1px solid white",
+    borderRadius: 15,
+    margin: "5px 15px",
+    padding: "20px 50px",
+    fontSize: 25
+  },
+  container: {
+    display: "flex",
+    justifyContent: "center"
+  }
+}
